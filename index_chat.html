@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <title>با بات فاروق گپ بزنید!</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style type="text/css">
+      body {
+        background-color: gray;
+      }
+      div {
+        width: 33%;
+        height: 46vw;
+        background-color: white;
+        border-radius: 1em;
+        text-align: center;
+        margin: auto;
+      }
+      footer {
+        text-align: center;
+      }
+      textarea {
+        background-color: black;
+        color: white;
+        width: 90%;
+        margin: auto;
+        margin-top: .5vw;
+        margin-bottom: 0vw;
+        height: 40%;
+        text-align: right;
+        direction: rtl; 
+      }
+      p {
+        text-align: right;
+        direction: rtl;
+      }
+      @media (max-width: 700px) {
+        div {
+          width: 100%;
+          height: 50vw;
+          text-align: center;
+          margin: 0;
+          border-radius: 0px;
+        }
+      }
+    </style>
+    <script>
+
+      var send = () => {
+        let msg_text = document.getElementsByTagName("input")[1].value;
+        let key = document.getElementsByTagName("input")[0].value;
+        fetch("/api?key=" + key + "&msg=" + msg_text).then(res => {
+          let msgs = document.getElementsByTagName("textarea")[0];
+          if (res.ok) {
+            msgs.innerHTML += "شما> " + msg_text + "\n";
+            res.text().then(txt => {
+              msgs.innerHTML += "بات> " + txt + "\n";
+            });
+	    document.getElementsByTagName("input")[1].value = "";
+          } else {
+            msgs.innerHTML += "نمیتوان به سرور متصل شد...\n";
+          }
+	  msgs.scrollTop = msgs.scrollHeight - msgs.clientHeight;
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div>
+      <textarea readonly></textarea>
+      <input value="(*KEY_HERE*)" type="hidden">
+      <input> <button>ارسال!</button>
+    </div>
+    <footer>
+      اثری از 
+      <a href="http://fubuntu.crabdance.com:2016">
+        فاروق کریمی زاده صاحب وب
+      </a>
+      <br>
+      لذت ببرید :)
+    </footer>
+    <script>
+      document.getElementsByTagName("button")[0].onclick = send;
+      document.getElementsByTagName("input")[1].onkeydown = e => {
+        if (e.key === "Enter") {
+          send();
+        }
+      };
+    </script>
+  </body>
+</html>
